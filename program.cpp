@@ -11,7 +11,7 @@ int main()
     TestComparationOperators();
     TestAritimeticOperators();
     TestPushPullPopRemoveInsert();
-    testes();
+    // testes();
 	return 0;
 }
 
