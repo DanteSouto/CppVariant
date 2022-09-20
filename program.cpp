@@ -135,7 +135,14 @@ void TestPushPullPopRemoveInsert()
     array.Push(100);                                // 1
     array.Push(true);                               // 2
     array.Push(std::string("testing..."));          // 3
-    array.Pull(std::string("testing...again"));     // stil 3
+    
+    lsvbs::Variant a;
+    a = array.Pull();     // a = 3
+    std::cout << "Pull(): " + a.ToString() + "\r\n";
+    std::size_t st = 1;
+    std::size_t* pst = &st;
+    a = array.Pull(pst);     // a = 2
+    std::cout << "Pull(1): " + a.ToString() + "\r\n";
     array.Push(10.5);                               // 4
     std::cout << "Size before POP: " + stringify(array.Count()) + "\r\n";
     array.Pop();                                    // 3

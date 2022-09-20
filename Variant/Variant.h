@@ -319,16 +319,26 @@ namespace lsvbs
             }
         }
         
-        template<typename T> void Pull(const T& value)
+        Variant Pull()
         {
-            if (mydata.type == DATA_TYPE::UNDEFINED)
+            if (mydata.type == DATA_TYPE::ARRAY)
             {
-                mydata.type = DATA_TYPE::ARRAY;
+                std::size_t pos = myarray.size() - 1;
+                return Pull(&pos);
             }
-
-            if (mydata.type = DATA_TYPE::ARRAY)
+            else
             {
-                Pull_part(value);
+                throw std::invalid_argument("It's not an array...");
+            }
+        }
+
+        Variant Pull(const std::size_t* pos)
+        {
+            if (mydata.type == DATA_TYPE::ARRAY)
+            {
+                Variant tmp(myarray[(*pos)]);
+                tmp.Accessor = Accessor;
+                return tmp;
             }
             else
             {
@@ -577,6 +587,47 @@ namespace lsvbs
             myarray.push_back(tmp_data);
         }
         
+        /*
+        template<typename T> T Pull_part(int* index)
+        {
+            if (std::is_same_v<T, Variant>)
+            {
+                return Pull_part<T>(value);
+            }
+            else if (std::is_same_v<T, data>)
+            {
+                return Pull_part<T>(value);
+            }
+            else if (std::is_same_v<T, bool>)
+            {
+                return Pull_part<T>(value);
+            }
+            else if (std::is_same_v<T, int>)
+            {
+                return Pull_part<int>(value);
+            }
+            else if (std::is_same_v<T, long>)
+            {
+                return Pull_part<T>(value);
+            }
+            else if (std::is_same_v<T, double>)
+            {
+                return Pull_part<T>(value);
+            }
+            else if (std::is_same_v<T, std::string>)
+            {
+                return Pull_part<T>(value);
+            }
+            else if (std::is_same_v<T, std::time_t>)
+            {
+                return Pull_part<T>(value);
+            }
+            else
+            {
+                throw std::invalid_argument("Not implemented...");
+            }
+        }
+        
         template<typename T> inline void Pull_part(T value)
         {
             if (std::is_same_v<T, Variant>)
@@ -617,61 +668,61 @@ namespace lsvbs
             }
         }
 
-        template<> inline void Pull_part<Variant>(Variant value)
+        template <typename T> T Pull_part<Variant>(std::size_t* index)
         {
-            data tmp_data = value.Data();
             std::size_t pos = myarray.size() - 1;
-            myarray[pos] = tmp_data;
+            myarray[index]
         }
 
-        template<> inline void Pull_part<data>(data value)
+        template <typename T> T Pull_part<data>(std::size_t* index)
         {
             data tmp_data = value;
             std::size_t pos = myarray.size() - 1;
             myarray[pos] = tmp_data;
         }
 
-        template<> inline void Pull_part<bool>(bool value)
+        template <typename T> T Pull_part<bool>(std::size_t* index)
         {
             data tmp_data = BitConverter::GetBytes(value);
             std::size_t pos = myarray.size() - 1;
             myarray[pos] = tmp_data;
         }
 
-        template<> inline void Pull_part<int>(int value)
+        template <typename T> T Pull_part<int>(std::size_t* index)
         {
             data tmp_data = BitConverter::GetBytes(value);
             std::size_t pos = myarray.size() - 1;
             myarray[pos] = tmp_data;
         }
 
-        template<> inline void Pull_part<long>(long value)
+        template <typename T> T Pull_part<long>(std::size_t* index)
         {
             data tmp_data = BitConverter::GetBytes(value);
             std::size_t pos = myarray.size() - 1;
             myarray[pos] = tmp_data;
         }
 
-        template<> inline void Pull_part<double>(double value)
+        template <typename T> T Pull_part<double>(std::size_t* index)
         {
             data tmp_data = BitConverter::GetBytes(value);
             std::size_t pos = myarray.size() - 1;
             myarray[pos] = tmp_data;
         }
 
-        template<> inline void Pull_part<std::string>(std::string value)
+        template <typename T> T Pull_part<std::string>(std::size_t* index)
         {
             data tmp_data = BitConverter::GetBytes(value);
             std::size_t pos = myarray.size() - 1;
             myarray[pos] = tmp_data;
         }
 
-        template<> inline void Pull_part<std::time_t>(std::time_t value)
+        template <typename T> T Pull_part<std::time_t>(std::size_t* index)
         {
             data tmp_data = BitConverter::GetBytes(value);
             std::size_t pos = myarray.size() - 1;
             myarray[pos] = tmp_data;
         }
+        */
 
         template<typename T> inline void Insert_part(int pos,T value)
         {
